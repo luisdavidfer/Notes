@@ -64,7 +64,7 @@ public class NoteDao {
     /**
      * Metodo para eliminar un registro de la tabla Notas
      *
-     * @param id nota
+     * @param id
      * @return Regresa true si se ha eliminado y false si ha habido un error
      * @throws Exception
      */
@@ -84,13 +84,14 @@ public class NoteDao {
     /**
      * Metodo que regresa una lista con todos las notas.
      *
-     * @return Lista de todos los objetos nota
+     * @param id
+     * @return Lista de todos los objetos nota filtrando por el id del usuario
      * @throws Exception
      */
     public List<Note> getAll(){
 
         try {
-            String sql = "select * from notes order by id desc";
+            String sql = "select * from notes order by id asc"; // where id = id
             PreparedStatement preparedStatement = conn.getConnection().prepareStatement(sql);
             ResultSet rs = preparedStatement.executeQuery();
             List<Note> list = new LinkedList<>();

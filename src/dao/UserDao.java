@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import model.*;
 
@@ -36,6 +37,33 @@ public class UserDao {
         }
     }
 
+    /**
+     * Metodo para validar un usuario administrador en la base de datos
+     * @param user
+     * @param pass
+     * @return Objeto de tipo Usuario con id, perfil, estado, etc.
+     */
+    public User login(String email, String password) {
 
+        try {
+            String sql = "select * from users where email= ? and password = ? limit 1";
+            PreparedStatement preparedStatement = conn.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, email);
+            preparedStatement.setString(2, password);
+            ResultSet rs = preparedStatement.executeQuery();
+            User user = new User(0);
+            while (rs.next()) {
+                // Create an object for the user
+                user.setId(rs.getInt("id"));
+                user.setEmail(rs.getString("email"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+            }
+            return user;
+        } catch (SQLException e) {
+            System.out.println("Error Dao.login: " + e.getMessage());
+            return null;
+        }
+    }
 
 }
