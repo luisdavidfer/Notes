@@ -25,8 +25,14 @@ public class loginController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: (LoginController) ").append(request.getContextPath());
+
+		if(request.getParameter("email") != null && request.getParameter("password") != null) {
+			// Si recibimos parametros por la url ejecutamos el metodo doPost para comprobar el acceso
+			doPost(request, response);
+		}else {
+			// Si no mandamos parametros por la url redireccionamos al inicio de sesion
+			response.sendRedirect(request.getContextPath());
+		}
 	}
 
 	/**
@@ -34,6 +40,7 @@ public class loginController extends HttpServlet {
 	 */
 	 protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	            throws ServletException, IOException {
+		 
 	        // Recibimos parametros del formulario de login
 	        String emailParam = request.getParameter("email");
 	        String passParam = request.getParameter("password");
@@ -52,13 +59,12 @@ public class loginController extends HttpServlet {
 	            // Creamos una variable de session, con el registro de usuario (Bean)
 	            // Verificar en el administrador de aplicaciones de tomcat.
 	            session.setAttribute("user", user);
-	            rd = request.getRequestDispatcher("/notes.jsp");
-	            rd.forward(request, response);
+	            response.sendRedirect(request.getContextPath());
 
 	        } else {
 	            msg = "*Credenciales incorrectos.";
 	            request.setAttribute("message", msg);
-	            rd = request.getRequestDispatcher("/index.jsp");
+	            rd = request.getRequestDispatcher("/login.jsp");
 	            rd.forward(request, response);
 	        }
 	    }

@@ -126,7 +126,7 @@
                 <p class="message">¿Ya tienes una cuenta? <a href="#">Inicia sesión</a></p>
             </form>
             <form class="login-form" action="login" method="post">
-                <input name="email" type="text" placeholder="Correo electrónico"/>
+                <input name="email" type="email" placeholder="Correo electrónico"/>
                 <input name="password" type="password" placeholder="Contraseña"/>
                 <button>Iniciar Sesión</button>
             </form>

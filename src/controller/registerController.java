@@ -24,8 +24,14 @@ public class registerController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: (registerController) ").append(request.getContextPath());
+
+		if(request.getParameter("email") != null && request.getParameter("password") != null) {
+			// Si recibimos parametros por la url ejecutamos el metodo doPost para realizar el registro
+			doPost(request, response);
+		}else {
+			// Si no mandamos parametros por la url mostramos la vista de inicio de sesion
+			response.sendRedirect(request.getContextPath());
+		}
 	}
 
 	/**

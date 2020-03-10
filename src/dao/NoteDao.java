@@ -48,10 +48,11 @@ public class NoteDao {
      */
     public boolean update(Note note) {
         try {
-            String sql = "update notes set title = ?, text = ? where id = " + note.getId();
+            String sql = "update notes set title = ?, text = ? where id = ?";
             PreparedStatement preparedStatement = conn.getConnection().prepareStatement(sql);
             preparedStatement.setString(1, note.getTitle());
             preparedStatement.setString(2, note.getText());
+            preparedStatement.setString(3, Integer.toString(note.getId()));
             preparedStatement.executeUpdate();
             return true;
 
@@ -111,6 +112,33 @@ public class NoteDao {
             return null;
         }
     }
+    
+    /**
+     * Metodo que regresa una nota.
+     *
+     * @param id
+     * @return Nota
+     * @throws Exception
+     */
+    public Note get(int id){
 
+        try {
+            String sql = "select * from notes where id = " + id;
+            PreparedStatement preparedStatement = conn.getConnection().prepareStatement(sql);
+            ResultSet rs = preparedStatement.executeQuery();
+            Note note = null;
+            while(rs.next()) {
+            	note = new Note(rs.getInt("id"));
+	            note.setTitle(rs.getString("title"));
+	            note.setText(rs.getString("text"));
+	            note.setUserId(rs.getString("user_id"));
+            }
+            return note;
+
+        } catch (SQLException e) {            
+            System.out.println("Error NoteDao.get: " + e.getMessage());
+            return null;
+        }
+    }
 
 }
