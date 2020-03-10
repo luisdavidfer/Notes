@@ -1,15 +1,22 @@
 package controller;
 
 import java.io.IOException;
-import java.util.List;
+import java.io.PrintWriter;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.jasper.tagplugins.jstl.core.Out;
+
+
+
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
+
+
 
 import dao.DbConnection;
 import dao.NoteDao;
@@ -63,7 +70,7 @@ public class notesController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		HttpSession session = request.getSession();
         // Comprobamos que hay un usuario logueado
 		if (session.getAttribute("user") != null) {
@@ -85,6 +92,7 @@ public class notesController extends HttpServlet {
 					updatedNote.setTitle(request.getParameter("title"));
 					updatedNote.setText(request.getParameter("text"));
 					noteDao.update(updatedNote);
+					
 					break;
 					 
 			    // ALMACENAR NOTA EN LA BASE DE DATOS 
@@ -93,6 +101,10 @@ public class notesController extends HttpServlet {
 					newNote.setTitle(request.getParameter("title"));
 					newNote.setText(request.getParameter("text"));
 					noteDao.update(newNote);
+					PrintWriter out;
+					//response.setContentType("text/html");
+					out = response.getWriter();
+					out.print('{"id"}');
 					break;
 			}
         }else{

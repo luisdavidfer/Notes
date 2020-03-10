@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import dao.DbConnection;
 import dao.NoteDao;
 import model.Note;
+import model.User;
 
 /**
  * Servlet implementation class siteController
@@ -26,7 +27,6 @@ public class siteController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		RequestDispatcher rd;
 		HttpSession session = request.getSession();
         if (session.getAttribute("user") == null) {
@@ -35,11 +35,14 @@ public class siteController extends HttpServlet {
             rd.forward(request, response);
         } else { 
         	// Existe la sesion accedemos a la aplicacion
+        	User user = (User)session.getAttribute("user");
         	DbConnection conn = new DbConnection();
     		NoteDao noteDao = new NoteDao(conn);
-    		List<Note> notes = noteDao.getAll();
+    		List<Note> notes = noteDao.getAll(user.getId());
     		conn.disconnect();
     		request.setAttribute("notes", notes);
+    		request.setAttribute("user", user);
+
     		rd = request.getRequestDispatcher("/notes.jsp");
             rd.forward(request, response);
         }	

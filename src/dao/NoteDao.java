@@ -83,16 +83,17 @@ public class NoteDao {
     }
 
     /**
-     * Metodo que regresa una lista con todos las notas.
+     * Metodo que regresa una lista con todos las notas de un usuario.
      *
      * @param id
      * @return Lista de todos los objetos nota filtrando por el id del usuario
      * @throws Exception
      */
-    public List<Note> getAll(){
+    public List<Note> getAll(int id){
 
         try {
-            String sql = "select * from notes order by id asc"; // where id = id
+            String sql = "select * from notes where user_id = " + id + " order by id asc";
+            System.out.println("sql query: " + sql);
             PreparedStatement preparedStatement = conn.getConnection().prepareStatement(sql);
             ResultSet rs = preparedStatement.executeQuery();
             List<Note> list = new LinkedList<>();
