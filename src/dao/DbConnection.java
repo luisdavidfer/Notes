@@ -52,7 +52,7 @@ public class DbConnection {
       System.out.println("Closing database: [" + conn + "] OK");
       if (conn != null) {
          try {
-            // System.out.println("Desconectado de " + bd + " OK");
+            System.out.println("Disconected from " + bd + " OK");
             conn.close();
          } catch (SQLException e) {
             System.out.println(e);

@@ -92,7 +92,6 @@ public class notesController extends HttpServlet {
 					updatedNote.setTitle(request.getParameter("title"));
 					updatedNote.setText(request.getParameter("text"));
 					noteDao.update(updatedNote);
-					
 					break;
 					 
 			    // ALMACENAR NOTA EN LA BASE DE DATOS 
@@ -100,11 +99,11 @@ public class notesController extends HttpServlet {
 					Note newNote = new Note(0);
 					newNote.setTitle(request.getParameter("title"));
 					newNote.setText(request.getParameter("text"));
-					noteDao.update(newNote);
-					PrintWriter out;
-					//response.setContentType("text/html");
-					out = response.getWriter();
-					out.print('{"id"}');
+					newNote.setUserId(request.getParameter("userId"));
+					int newId = noteDao.insert(newNote);
+					response.setContentType( "text/html; charset=iso-8859-1" );
+					PrintWriter out = response.getWriter();
+					out.print(newId);
 					break;
 			}
         }else{

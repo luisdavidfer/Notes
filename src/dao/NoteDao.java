@@ -19,10 +19,10 @@ public class NoteDao {
      * Metodo para insertar un registro en la tabla Notas
      *
      * @param nota
-     * @return Regresa true si se ha insertado y false si ha habido un error
+     * @return Regresa el id del nuevo registro o 0 en caso de error
      * @throws Exception
      */
-    public boolean insert(Note note) {
+    public int insert(Note note) {
         try {
             String sql = "insert into notes values (?,?,?,?)";
             PreparedStatement preparedStatement = conn.getConnection().prepareStatement(sql);
@@ -31,11 +31,14 @@ public class NoteDao {
             preparedStatement.setString(3, note.getText());
             preparedStatement.setString(4, note.getUserId());
             preparedStatement.executeUpdate();
-            return true;
+            ResultSet rs = preparedStatement.executeQuery("select id from notes order by id desc limit 1");
+            rs.next();
+            int id = rs.getInt("id");
+            return id;
 
         } catch (SQLException e) {
             System.out.println("Error NoteDao.insert: " + e.getMessage());
-            return false;
+            return 0;
         }
     }
 
@@ -43,10 +46,10 @@ public class NoteDao {
      * Metodo para insertar un registro en la tabla Notas
      *
      * @param nota
-     * @return Regresa true si se ha insertado y false si ha habido un error
+     * @return Regresa el id del registro actualizado o 0 en caso de error
      * @throws Exception
      */
-    public boolean update(Note note) {
+    public int update(Note note) {
         try {
             String sql = "update notes set title = ?, text = ? where id = ?";
             PreparedStatement preparedStatement = conn.getConnection().prepareStatement(sql);
@@ -54,11 +57,11 @@ public class NoteDao {
             preparedStatement.setString(2, note.getText());
             preparedStatement.setString(3, Integer.toString(note.getId()));
             preparedStatement.executeUpdate();
-            return true;
+            return note.getId();
 
         } catch (SQLException e) {
             System.out.println("Error NoteDao.update: " + e.getMessage());
-            return false;
+            return 0;
         }
     }
     
@@ -93,7 +96,6 @@ public class NoteDao {
 
         try {
             String sql = "select * from notes where user_id = " + id + " order by id asc";
-            System.out.println("sql query: " + sql);
             PreparedStatement preparedStatement = conn.getConnection().prepareStatement(sql);
             ResultSet rs = preparedStatement.executeQuery();
             List<Note> list = new LinkedList<>();

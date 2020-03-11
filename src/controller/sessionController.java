@@ -29,7 +29,6 @@ public class sessionController extends HttpServlet {
 
 		if((request.getParameter("email") != null && request.getParameter("password") != null) || (request.getParameter("email") != null && request.getParameter("password") != null  && request.getParameter("username") != null)) {
 			// Si recibimos parametros por la url ejecutamos el metodo doPost con los parametros recibidos
-			System.out.println("logout get");
 			doPost(request, response);
 		}else {
 			// Si no mandamos parametros por la url redireccionamos al inicio de sesion
@@ -42,7 +41,6 @@ public class sessionController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("logout post");
 		HttpSession session = null;
 		DbConnection conn = null;
 		UserDao userDao = null;
@@ -70,7 +68,6 @@ public class sessionController extends HttpServlet {
 		            // Verificar en el administrador de aplicaciones de tomcat.
 		            session.setAttribute("user", user);
 		            
-		            System.out.println(session.getAttribute("user"));
 		            response.sendRedirect(request.getContextPath());
 
 		        } else {
@@ -88,7 +85,7 @@ public class sessionController extends HttpServlet {
 				registeredUser.setPassword(request.getParameter("password"));
 				registeredUser.setEmail(request.getParameter("email"));
 				
-				System.out.println(registeredUser);
+				System.out.println("Registered user: " + registeredUser);
 				
 				// Almacenamiento en la BD
 				conn = new DbConnection();

@@ -6,7 +6,6 @@
     <!-- Required meta tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="icon" href="favicon.png">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <!-- Font -->
@@ -96,13 +95,6 @@
             outline: none;
         }
 
-        @media (max-width: 300px){
-            .btn-create{
-                margin: 15px auto;
-                position: static;
-                box-shadow: 0px 2px 10px #00000070;
-            }
-        }
         .icon{
             margin-right: 5px;
             margin-bottom: 5px;
@@ -174,17 +166,18 @@
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script>
         $(function(){
         	// Hover efect over note to display remove button
-            $(".card").hover(function(){
-                $(this).find(".btn-close").show();
-            }, function(){
-                $(".btn-close").hide();
-            });
+         	$(document).on('mouseenter','.card', function(){
+         		$(this).find(".btn-close").show();
+         	});
+         	$(document).on('mouseleave','.card', function(){
+         		$(".btn-close").hide();
+         	});
             // Insert click handler
             $(".btn-create").click(function(){
                 $("#modal").modal("show");
@@ -194,13 +187,11 @@
                 $("#modal [name='id']").val("0");
             });
             // Update click handler
-            $(".card").click(function(){
+ 			$(document).on('click','.card', function(){
                 $("#modal").modal("show");
-                $("#modal [name='title']").val($(this).find(".card-title").html());
+            	$("#modal [name='title']").val($(this).find(".card-title").html());
                 $("#modal [name='text']").val($(this).find(".card-text").html());
                 $("#modal [name='id']").val($(this).find(".card-id").html());
-                //$("#modal [name='userId']").val($(this).find(".card-userId").html());
-
             });
             // Mobile version without username at header
             if(window.orientation !== undefined){
@@ -208,9 +199,11 @@
             }
             // Save event handler
             $("#modal").on("hide.bs.modal", function(){
+            	// COMPROBAR CAMPOS
             	let noteId = $("#modal [name='id']").val();
             	let noteTitle = $("#modal [name='title']").val();
             	let noteText = $("#modal [name='text']").val();
+            	let noteUserId = $("#modal [name='userId']").val();
             	if(noteId == 0){
             	// IF ID == 0 note.inser
                 	$.ajax({
@@ -219,19 +212,19 @@
             			data : {
             				action : "store",
             				title : noteTitle,
-            				text : noteText
+            				text : noteText,
+            				userId : noteUserId
             			},
             			success : function(response) {
-            				console.log(response);
             				$(".row").append(
-        						 "<div id='"+"' class='col-lg-2 col-md-4 col-sm-6 col-12 my-3 mx-0'>" 
+        						 "<div id='"+ response + "' class='col-lg-2 col-md-4 col-sm-6 col-12 my-3 mx-0'>" 
         			               + "<div class='card'>"
         			                    +"<div class='card-body'>"
         			                       + "<svg class='btn-close close' height='512px' id='Layer_1' style='enable-background:new 0 0 512 512;' version='1.1' viewBox='0 0 512 512' width='512px' xml:space='preserve' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' ><path d='M443.6,387.1L312.4,255.4l131.5-130c5.4-5.4,5.4-14.2,0-19.6l-37.4-37.6c-2.6-2.6-6.1-4-9.8-4c-3.7,0-7.2,1.5-9.8,4  L256,197.8L124.9,68.3c-2.6-2.6-6.1-4-9.8-4c-3.7,0-7.2,1.5-9.8,4L68,105.9c-5.4,5.4-5.4,14.2,0,19.6l131.5,130L68.4,387.1  c-2.6,2.6-4.1,6.1-4.1,9.8c0,3.7,1.4,7.2,4.1,9.8l37.4,37.6c2.7,2.7,6.2,4.1,9.8,4.1c3.5,0,7.1-1.3,9.8-4.1L256,313.1l130.7,131.1  c2.7,2.7,6.2,4.1,9.8,4.1c3.5,0,7.1-1.3,9.8-4.1l37.4-37.6c2.6-2.6,4.1-6.1,4.1-9.8C447.7,393.2,446.2,389.7,443.6,387.1z'/></svg>"
-        			                       + "<h5 class='card-title'>"+"</h5>"
-        			                       + "<p class='card-text'>"+"</p>"
-        			                       + "<span class='card-id' hidden>"+"</span>"
-        			                       + "<span class='card-userId' hidden>"+"</span>"
+        			                       + "<h5 class='card-title'>" + noteTitle + "</h5>"
+        			                       + "<p class='card-text'>" + noteText + "</p>"
+        			                       + "<span class='card-id' hidden>"+ response + "</span>"
+        			                       + "<span class='card-userId' hidden>" + noteUserId + "</span>"
         			                   + "</div>"
         			               + "</div>"
         			           + "</div>"	
@@ -240,24 +233,25 @@
             		});
             	}else{
             	// ELSE note.update
-                	$.ajax({
+            		$.ajax({
             			url : "notes",
             			method : "post",
             			data : {
             				action : "update",
             				id : noteId,
-            				title : $("#modal [name='title']").val(),
-            				text : $("#modal [name='text']").val()
+            				title : noteTitle,
+            				text : noteText
             			},
-            			success : function() {
-            				$("#"+noteId).remove();
+            			success : function(response) {
+            				$("#"+noteId).find("h5.card-title").html(noteTitle);
+            				$("#"+noteId).find("p.card-text").html(noteText);
             			}
             		});
             	}
             });
             // Delete event handler
-            $(".btn-close").on("click", function(e){
-             	e.stopPropagation();
+         	$(document).on('click','.btn-close', function(e){
+         		e.stopPropagation();
              	let noteId = $(this).parent().find(".card-id").html()
             	$.ajax({
         			url : "notes",
@@ -270,8 +264,8 @@
         				$("#"+noteId).remove();
         			}
         		});
-            });
-            // Logout
+         	});
+            // Logout click handler
             $("#logout span").click(function(){
             	$("#logout").submit();
             })
