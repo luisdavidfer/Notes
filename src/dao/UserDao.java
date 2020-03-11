@@ -20,7 +20,7 @@ public class UserDao {
      * @return Regresa true si se ha insertado y false si ha habido un error
      * @throws Exception
      */
-    public boolean insert(User user) {
+    public int insert(User user) {
         try {
             String sql = "insert into users values (?,?,?,?)";
             PreparedStatement preparedStatement = conn.getConnection().prepareStatement(sql);
@@ -29,11 +29,14 @@ public class UserDao {
             preparedStatement.setString(3, user.getPassword());
             preparedStatement.setString(4, user.getEmail());
             preparedStatement.executeUpdate();
-            return true;
+            ResultSet rs = preparedStatement.executeQuery("select id from users order by id desc limit 1");
+            rs.next();
+            int id = rs.getInt("id");
+            return id;
 
         } catch (SQLException e) {
             System.out.println("Error UserDao.insert: " + e.getMessage());
-            return false;
+            return 0;
         }
     }
 

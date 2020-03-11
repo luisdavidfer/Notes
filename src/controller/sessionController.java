@@ -90,16 +90,20 @@ public class sessionController extends HttpServlet {
 				// Almacenamiento en la BD
 				conn = new DbConnection();
 				userDao = new UserDao(conn);
-				if(userDao.insert(registeredUser)) {
+				int id = userDao.insert(registeredUser);
+				if(id > 0) {
+					registeredUser.setId(id);
 					System.out.println("Saved: " + registeredUser.toString());
+					session = request.getSession();
+					session.setAttribute("user", registeredUser);
+					
 				}else {
 					System.out.println("Error: " + registeredUser.toString());
 				}
 				
 				conn.disconnect();
+				
 
-				session = request.getSession();
-				session.setAttribute("user", registeredUser);
 				response.sendRedirect(request.getContextPath());
 				break;
 				 
