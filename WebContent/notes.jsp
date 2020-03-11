@@ -11,7 +11,7 @@
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 
-    <title>Hello, world!</title>
+    <title>Notas de ${user.username}</title>
     <style>
         *{
             font-family: 'Roboto', sans-serif;
