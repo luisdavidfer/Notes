@@ -180,18 +180,17 @@
          	});
             // Insert click handler
             $(".btn-create").click(function(){
-                $("#modal").modal("show");
                 $("#modal [name='title']").val("");
                 $("#modal [name='text']").val("");
-                //$("#modal [name='userId']").val("${user.id}");
                 $("#modal [name='id']").val("0");
+                $("#modal").modal("show");
             });
             // Update click handler
  			$(document).on('click','.card', function(){
-                $("#modal").modal("show");
             	$("#modal [name='title']").val($(this).find(".card-title").html());
                 $("#modal [name='text']").val($(this).find(".card-text").html());
                 $("#modal [name='id']").val($(this).find(".card-id").html());
+                $("#modal").modal("show");
             });
             // Mobile version without username at header
             if(window.orientation !== undefined){
@@ -199,54 +198,73 @@
             }
             // Save event handler
             $("#modal").on("hide.bs.modal", function(){
-            	// COMPROBAR CAMPOS
+            	// Check fields
             	let noteId = $("#modal [name='id']").val();
             	let noteTitle = $("#modal [name='title']").val();
             	let noteText = $("#modal [name='text']").val();
             	let noteUserId = $("#modal [name='userId']").val();
             	if(noteId == 0){
-            	// IF ID == 0 note.inser
-                	$.ajax({
-            			url : "notes",
-            			method : "post",
-            			data : {
-            				action : "store",
-            				title : noteTitle,
-            				text : noteText,
-            				userId : noteUserId
-            			},
-            			success : function(response) {
-            				$(".row").append(
-        						 "<div id='"+ response + "' class='col-lg-2 col-md-4 col-sm-6 col-12 my-3 mx-0'>" 
-        			               + "<div class='card'>"
-        			                    +"<div class='card-body'>"
-        			                       + "<svg class='btn-close close' height='512px' id='Layer_1' style='enable-background:new 0 0 512 512;' version='1.1' viewBox='0 0 512 512' width='512px' xml:space='preserve' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' ><path d='M443.6,387.1L312.4,255.4l131.5-130c5.4-5.4,5.4-14.2,0-19.6l-37.4-37.6c-2.6-2.6-6.1-4-9.8-4c-3.7,0-7.2,1.5-9.8,4  L256,197.8L124.9,68.3c-2.6-2.6-6.1-4-9.8-4c-3.7,0-7.2,1.5-9.8,4L68,105.9c-5.4,5.4-5.4,14.2,0,19.6l131.5,130L68.4,387.1  c-2.6,2.6-4.1,6.1-4.1,9.8c0,3.7,1.4,7.2,4.1,9.8l37.4,37.6c2.7,2.7,6.2,4.1,9.8,4.1c3.5,0,7.1-1.3,9.8-4.1L256,313.1l130.7,131.1  c2.7,2.7,6.2,4.1,9.8,4.1c3.5,0,7.1-1.3,9.8-4.1l37.4-37.6c2.6-2.6,4.1-6.1,4.1-9.8C447.7,393.2,446.2,389.7,443.6,387.1z'/></svg>"
-        			                       + "<h5 class='card-title'>" + noteTitle + "</h5>"
-        			                       + "<p class='card-text'>" + noteText + "</p>"
-        			                       + "<span class='card-id' hidden>"+ response + "</span>"
-        			                       + "<span class='card-userId' hidden>" + noteUserId + "</span>"
-        			                   + "</div>"
-        			               + "</div>"
-        			           + "</div>"	
-            				);
-            			}
-            		});
+            		// IF ID == 0 note.inser
+            		// Check filled fields to save
+	            	if(noteTitle != "" || noteText != ""){
+	            		$.ajax({
+	            			url : "notes",
+	            			method : "post",
+	            			data : {
+	            				action : "store",
+	            				title : noteTitle,
+	            				text : noteText,
+	            				userId : noteUserId
+	            			},
+	            			success : function(response) {
+	            				$(".row").append(
+	        						 "<div id='"+ response + "' class='col-lg-2 col-md-4 col-sm-6 col-12 my-3 mx-0'>" 
+	        			               + "<div class='card'>"
+	        			                    +"<div class='card-body'>"
+	        			                       + "<svg class='btn-close close' height='512px' id='Layer_1' style='enable-background:new 0 0 512 512;' version='1.1' viewBox='0 0 512 512' width='512px' xml:space='preserve' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' ><path d='M443.6,387.1L312.4,255.4l131.5-130c5.4-5.4,5.4-14.2,0-19.6l-37.4-37.6c-2.6-2.6-6.1-4-9.8-4c-3.7,0-7.2,1.5-9.8,4  L256,197.8L124.9,68.3c-2.6-2.6-6.1-4-9.8-4c-3.7,0-7.2,1.5-9.8,4L68,105.9c-5.4,5.4-5.4,14.2,0,19.6l131.5,130L68.4,387.1  c-2.6,2.6-4.1,6.1-4.1,9.8c0,3.7,1.4,7.2,4.1,9.8l37.4,37.6c2.7,2.7,6.2,4.1,9.8,4.1c3.5,0,7.1-1.3,9.8-4.1L256,313.1l130.7,131.1  c2.7,2.7,6.2,4.1,9.8,4.1c3.5,0,7.1-1.3,9.8-4.1l37.4-37.6c2.6-2.6,4.1-6.1,4.1-9.8C447.7,393.2,446.2,389.7,443.6,387.1z'/></svg>"
+	        			                       + "<h5 class='card-title'>" + noteTitle + "</h5>"
+	        			                       + "<p class='card-text'>" + noteText + "</p>"
+	        			                       + "<span class='card-id' hidden>"+ response + "</span>"
+	        			                       + "<span class='card-userId' hidden>" + noteUserId + "</span>"
+	        			                   + "</div>"
+	        			               + "</div>"
+	        			           + "</div>"	
+	            				);
+	            			}
+	            		});    		
+    	        	}
+
             	}else{
-            	// ELSE note.update
-            		$.ajax({
-            			url : "notes",
-            			method : "post",
-            			data : {
-            				action : "update",
-            				id : noteId,
-            				title : noteTitle,
-            				text : noteText
-            			},
-            			success : function(response) {
-            				$("#"+noteId).find("h5.card-title").html(noteTitle);
-            				$("#"+noteId).find("p.card-text").html(noteText);
-            			}
-            		});
+            		// ELSE note.update
+            		// Check empty fields to delete
+            		if(noteTitle != "" || noteText != ""){
+            			$.ajax({
+                			url : "notes",
+                			method : "post",
+                			data : {
+                				action : "update",
+                				id : noteId,
+                				title : noteTitle,
+                				text : noteText
+                			},
+                			success : function(response) {
+                				$("#"+noteId).find("h5.card-title").html(noteTitle);
+                				$("#"+noteId).find("p.card-text").html(noteText);
+                			}
+                		});	
+            		}else{
+            			$.ajax({
+                			url : "notes",
+                			method : "post",
+                			data : {
+                				action : "remove",
+                				id : noteId
+                			},
+                			success : function() {
+                				$("#"+noteId).remove();
+                			}
+                		});
+            		}	
             	}
             });
             // Delete event handler
