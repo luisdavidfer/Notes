@@ -171,12 +171,25 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script>
         $(function(){
-        	// Hover efect over note to display remove button
+            // Mobile version
+            let mobile = false;
+            if(window.orientation !== undefined){
+            	// Hide user name in bar
+            	$("#username").hide();
+            	// Display always notes remove button
+            	$(".btn-close").show();
+            	// Enable mobile mode
+            	mobile = true;
+            }
+            $()
+        	// Hover efect over note to display remove button only on computers
          	$(document).on('mouseenter','.card', function(){
-         		$(this).find(".btn-close").show();
+         		if(!mobile)
+         			$(this).find(".btn-close").show();
          	});
          	$(document).on('mouseleave','.card', function(){
-         		$(".btn-close").hide();
+         		if(!mobile)
+         			$(".btn-close").hide();
          	});
             // Insert click handler
             $(".btn-create").click(function(){
@@ -192,10 +205,6 @@
                 $("#modal [name='id']").val($(this).find(".card-id").html());
                 $("#modal").modal("show");
             });
-            // Mobile version without username at header
-            if(window.orientation !== undefined){
-            	$("#username").hide();
-            }
             // Save event handler
             $("#modal").on("hide.bs.modal", function(){
             	// Check fields
@@ -230,6 +239,8 @@
 	        			               + "</div>"
 	        			           + "</div>"	
 	            				);
+	            				if(mobile)
+	            					$(".btn-close:last").show();
 	            			}
 	            		});    		
     	        	}
